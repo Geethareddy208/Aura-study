@@ -336,7 +336,9 @@ const generateCalendarHTML = () => {
 
     calendarHTML += '</div>';
     return calendarHTML;
-}const generateDashboardHTML = () => {
+};
+
+const generateDashboardHTML = () => {
     // Calculate last 7 days activity for the bar chart
     const today = new Date();
     const last7Days = [];
@@ -396,6 +398,8 @@ const generateCalendarHTML = () => {
             </div>
         </div>
 
+        </div>
+
         <div class="section-row" style="grid-template-columns: 1fr 1fr; margin-top: 1.5rem;">
             <div class="card main-stats">
               <h3>Weekly Performance</h3>
@@ -405,7 +409,6 @@ const generateCalendarHTML = () => {
                   </div>
               </div>
             </div>
-/div>
 
             <div class="card side-list">
                 <h3>Today's Subjects</h3>
