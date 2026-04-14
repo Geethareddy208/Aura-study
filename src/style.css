@@ -659,20 +659,19 @@ input:checked + .slider:before { transform: translateX(26px); }
 }
 
 .calendar-day.completed {
-  background: rgba(154, 140, 115, 0.15);
-  border-color: var(--primary);
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
   color: var(--text-main);
 }
 
 .calendar-day.completed::after {
-  content: "📖";
+  content: "📗";
   position: absolute;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   bottom: -2px;
   right: 50%;
   transform: translateX(50%);
-  color: var(--secondary);
-  filter: drop-shadow(0 0 5px var(--secondary));
+  filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.4));
 }
 
 @keyframes glow {
