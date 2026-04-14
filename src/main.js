@@ -340,6 +340,56 @@ const generateCalendarHTML = () => {
     return calendarHTML;
 };
 
+const generatePlannerHTML = () => {
+    return `
+        <div class="view-header">
+            <h1>Study Planner</h1>
+            <p>Organize your day for maximum efficiency.</p>
+        </div>
+        <div class="planner-grid">
+            <div class="card timetable">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3>Daily Timetable</h3>
+                    <button class="btn btn-primary btn-small" id="add-task-btn"><i data-lucide="plus"></i> Add Task</button>
+                </div>
+                <div class="time-slots" id="daily-timetable-slots">
+                    ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
+                        dailyTasks.map(task => `
+                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
+                                <div class="status-indicator status-${task.status.toLowerCase()}" 
+                                     data-id="${task.id}" 
+                                     data-status="${task.status}" 
+                                     style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--surface-border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; background: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'transparent')}">
+                                     ${task.status === 'Done' ? '✓' : (task.status === 'Progress' ? '½' : '')}
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 500;">${task.task_name}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${task.start_time || 'No time set'} - ${task.status}</div>
+                                </div>
+                                <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
+                                   style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 16px;"></i>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+            <div class="card exam-countdown">
+                <div class="setting-group">
+                    <h3>Exam Countdown</h3>
+                    <div class="deadline-list">
+                        <div style="border: 1px dashed var(--surface-border); padding: 1.5rem; border-radius: 1rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+                            No upcoming exams tracked
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 1rem; background: rgba(148, 163, 184, 0.05);">
+                    <p style="font-size: 0.85rem;"><i data-lucide="info" style="width: 14px; vertical-align: middle;"></i> New exams can be added in the Vault.</p>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
 // View Management
 const views = {
     dashboard: `
@@ -506,51 +556,7 @@ const views = {
         </div>
     `,
     planner: `
-        <div class="view-header">
-            <h1>Study Planner</h1>
-            <p>Organize your day for maximum efficiency.</p>
-        </div>
-        <div class="planner-grid">
-            <div class="card timetable">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h3>Daily Timetable</h3>
-                    <button class="btn btn-primary btn-small" id="add-task-btn"><i data-lucide="plus"></i> Add Task</button>
-                </div>
-                <div class="time-slots" id="daily-timetable-slots">
-                    ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
-                        dailyTasks.map(task => `
-                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
-                                <div class="status-indicator status-${task.status.toLowerCase()}" 
-                                     data-id="${task.id}" 
-                                     data-status="${task.status}" 
-                                     style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--surface-border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px;">
-                                     ${task.status === 'Done' ? '✓' : (task.status === 'Progress' ? '½' : '')}
-                                </div>
-                                <div style="flex: 1;">
-                                    <div style="font-size: 0.9rem; font-weight: 500;">${task.task_name}</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${task.start_time || 'No time set'} - ${task.status}</div>
-                                </div>
-                                <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
-                                   style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 16px;"></i>
-                            </div>
-                        `).join('')
-                    }
-                </div>
-            </div>
-            <div class="card exam-countdown">
-                <div class="setting-group">
-                    <h3>Exam Countdown</h3>
-                    <div class="deadline-list">
-                        <div style="border: 1px dashed var(--surface-border); padding: 1.5rem; border-radius: 1rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-                            No upcoming exams tracked
-                        </div>
-                    </div>
-                </div>
-                <div class="card" style="margin-top: 1rem; background: rgba(148, 163, 184, 0.05);">
-                    <p style="font-size: 0.85rem;"><i data-lucide="info" style="width: 14px; vertical-align: middle;"></i> New exams can be added in the Vault.</p>
-                </div>
-            </div>
-        </div>
+        <div id="planner-dynamic-container"></div>
     `,
     insights: `
         <div class="view-header">
@@ -746,6 +752,14 @@ const switchView = (viewName) => {
             const calendarContainer = document.getElementById('activity-calendar-container');
             if (calendarContainer) {
                 calendarContainer.innerHTML = generateCalendarHTML();
+            }
+        }
+
+        // Custom logic for planner (dynamic injection)
+        if (viewName === 'planner') {
+            const plannerContainer = document.getElementById('planner-dynamic-container');
+            if (plannerContainer) {
+                plannerContainer.innerHTML = generatePlannerHTML();
             }
         }
 
