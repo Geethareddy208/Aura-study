@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #B7B1F2;        /* Lavender */
-  --primary-hover: #9E97E2;
-  --secondary: #FDB7EA;      /* Pink */
-  --accent: #FFDCCC;         /* Peach */
-  --bg-dark: #FBF3B9;        /* Yellow/Cream base */
-  --bg-darker: #FBF3B1;      /* Slightly darker yellow */
-  --surface: rgba(255, 255, 255, 0.6);
+  --primary: #D8E2DC;        /* Button/Action Sage */
+  --primary-hover: #C5D1C9;
+  --secondary: #FCD5CE;      /* Dashboard Card Pink */
+  --accent: #E8E8E4;         /* Calendar Stone */
+  --bg-dark: #FFE5D9;        /* Main Background Blush */
+  --bg-darker: #FAD4C0;      /* Slightly deeper blush */
+  --surface: #FCD5CE;        /* Dashboard Cards */
   --surface-border: rgba(0, 0, 0, 0.05);
   --text-main: #4A4458;      /* Soft Deep Charcoal */
   --text-muted: #8E8A9A;      /* Soft Slate-Purple text */
-  --shadow: 0 10px 30px -5px rgba(183, 177, 242, 0.15);
+  --shadow: 0 10px 30px -5px rgba(250, 212, 192, 0.3);
   --glass-bg: rgba(255, 255, 255, 0.4);
   --glass-border: rgba(255, 255, 255, 0.2);
   --sidebar-width: 260px;
@@ -25,7 +25,7 @@
 }
 
 body {
-  background-color: var(--bg-darker);
+  background-color: var(--bg-dark);
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -52,21 +52,21 @@ body {
 /* Sidebar */
 .sidebar {
   width: var(--sidebar-width);
-  background: var(--primary); /* Use Lavender for Sidebar */
-  border-right: 1px solid var(--glass-border);
+  background: #FAD4C0; /* Harmonious Sidebar Blush */
+  border-right: 1px solid var(--surface-border);
   display: flex;
   flex-direction: column;
   padding: 2rem 1.5rem;
   position: fixed;
   height: 100vh;
   z-index: 100;
-  box-shadow: 10px 0 30px rgba(183, 177, 242, 0.1);
+  box-shadow: 10px 0 30px rgba(0,0,0,0.02);
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-main);
   margin-bottom: 3rem;
   display: flex;
   align-items: center;
@@ -86,19 +86,20 @@ body {
   gap: 1rem;
   padding: 0.875rem 1rem;
   border-radius: 0.75rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .nav-item:hover, .nav-item.active {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--text-main);
 }
 
 .nav-item.active {
-  border-left: 3px solid white;
+  background: white;
+  border-left: 3px solid var(--primary);
 }
 
 /* Main Content */
@@ -115,8 +116,8 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 0 4rem;
-  border-bottom: 1px solid var(--glass-border);
-  background: rgba(251, 243, 185, 0.6); /* Yellow semi-transparent */
+  border-bottom: 1px solid var(--surface-border);
+  background: rgba(255, 229, 217, 0.8); /* FFE5D9 semi-transparent */
   backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
@@ -157,12 +158,11 @@ header {
 
 /* Card Styles */
 .card {
-  background: var(--surface);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--surface-border);
+  background: var(--surface); /* Use FCD5CE */
+  border: 1px solid rgba(0, 0, 0, 0.03);
   border-radius: 1.25rem;
   padding: 1.5rem;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
 }
 
 /* Grid & Layout Utilities */
@@ -296,9 +296,9 @@ header {
 }
 
 .btn-secondary {
-  background: white;
+  background: #E8E8E4;
   color: var(--text-main);
-  border: 1px solid var(--surface-border);
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .btn-large {
@@ -647,8 +647,8 @@ input:checked + .slider:before { transform: translateX(26px); }
   justify-content: center;
   border-radius: 0.6rem;
   font-size: 0.85rem;
-  background: white;
-  border: 1px solid var(--surface-border);
+  background: #E8E8E4; /* Stone/Calendar background */
+  border: 1px solid rgba(0,0,0,0.03);
   position: relative;
   transition: all 0.2s;
   color: var(--text-muted);
