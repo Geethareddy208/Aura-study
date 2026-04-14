@@ -177,7 +177,14 @@ const views = {
             <p>You've maintained a 7-day streak! Keep it up.</p>
         </div>
         
-        <div class="grid-container">
+        <div class="card activity-card" style="margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 1.5rem;">Study Activity</h3>
+            <div id="activity-calendar-container">
+                <!-- Calendar injected here -->
+            </div>
+        </div>
+
+        <div class="grid-container" style="margin-top: 1.5rem;">
             <div class="card stat-card">
                 <div class="stat-header">
                     <i data-lucide="flame" class="icon-streak"></i>
@@ -209,14 +216,7 @@ const views = {
             </div>
         </div>
 
-        <div class="section-row" style="grid-template-columns: 1.5fr 1fr;">
-            <div class="card activity-card">
-                <h3 style="margin-bottom: 1.5rem;">Study Activity</h3>
-                <div id="activity-calendar-container">
-                    <!-- Calendar injected here -->
-                </div>
-            </div>
-            
+        <div class="section-row" style="grid-template-columns: 1fr 1fr; margin-top: 1.5rem;">
             <div class="card main-stats">
               <h3>Weekly Performance</h3>
               <div class="chart-placeholder">
@@ -231,15 +231,15 @@ const views = {
                   </div>
               </div>
             </div>
-        </div>
 
-        <div class="card side-list" style="margin-top: 1.5rem;">
-            <h3>Today's Subjects</h3>
-            <ul class="subject-list" id="today-subjects-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                <li style="border: 1px dashed var(--surface-border); background: transparent; justify-content: center; color: var(--text-muted); font-size: 0.8rem;">
-                    No subjects tracked today yet
-                </li>
-            </ul>
+            <div class="card side-list">
+                <h3>Today's Subjects</h3>
+                <ul class="subject-list" id="today-subjects-list" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                    <li style="border: 1px dashed var(--surface-border); background: transparent; justify-content: center; color: var(--text-muted); font-size: 0.8rem;">
+                        No subjects tracked today yet
+                    </li>
+                </ul>
+            </div>
         </div>
     `,
     focus: `
