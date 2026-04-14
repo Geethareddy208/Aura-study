@@ -353,15 +353,23 @@ const generatePlannerHTML = () => {
                 <div class="time-slots" id="daily-timetable-slots">
                     ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
                         dailyTasks.map(task => `
-                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
-                                <div class="status-options" style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
-                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; cursor: pointer; color: ${task.status === 'Pending' ? 'var(--text-main)' : 'var(--text-muted)'}">
+                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem; border-bottom: 1px solid var(--surface-border);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 1rem; font-weight: 600; color: var(--text-main);">${task.task_name}</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">${task.start_time || 'No time set'}</div>
+                                    </div>
+                                    <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
+                                       style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 18px;"></i>
+                                </div>
+                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.5rem; background: rgba(0,0,0,0.2); padding: 0.5rem 0.75rem; border-radius: 0.5rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Pending' ? 'var(--text-main)' : 'var(--text-muted)'}">
                                         <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--primary);"> Pending
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; cursor: pointer; color: ${task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)'}">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)'}">
                                         <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--accent);"> In Progress
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; cursor: pointer; color: ${task.status === 'Done' ? 'var(--secondary)' : 'var(--text-muted)'}">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Done' ? 'var(--secondary)' : 'var(--text-muted)'}">
                                         <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--secondary);"> Done
                                     </label>
                                 </div>
