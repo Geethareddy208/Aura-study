@@ -507,17 +507,17 @@ const views = {
                     <h1>Aura Study</h1>
                     <p>Enter your credentials to continue</p>
                 </div>
-                <div class="auth-form" id="login-form">
+                <form class="auth-form" id="login-form">
                     <div class="input-group">
                         <label>Email</label>
-                        <input type="email" id="login-email" placeholder="scholar@example.com">
+                        <input type="email" id="login-email" placeholder="scholar@example.com" required>
                     </div>
                     <div class="input-group">
                         <label>Password</label>
-                        <input type="password" id="login-password" placeholder="••••••••">
+                        <input type="password" id="login-password" placeholder="••••••••" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-large" style="width: 100%; justify-content: center;">Sign In</button>
-                </div>
+                </form>
                 <div class="auth-footer">
                     Don't have an account? <a id="go-signup">Create one</a>
                 </div>
@@ -531,21 +531,21 @@ const views = {
                     <h1>Join Aura Study</h1>
                     <p>Start tracking your study journey today</p>
                 </div>
-                <div class="auth-form" id="signup-form">
+                <form class="auth-form" id="signup-form">
                     <div class="input-group">
                         <label>Full Name / Username</label>
-                        <input type="text" id="signup-username" placeholder="John Doe">
+                        <input type="text" id="signup-username" placeholder="John Doe" required>
                     </div>
                     <div class="input-group">
                         <label>Email Address</label>
-                        <input type="email" id="signup-email" placeholder="john@example.com">
+                        <input type="email" id="signup-email" placeholder="john@example.com" required>
                     </div>
                     <div class="input-group">
                         <label>Password</label>
-                        <input type="password" id="signup-password" placeholder="••••••••">
+                        <input type="password" id="signup-password" placeholder="••••••••" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-large" style="width: 100%; justify-content: center;">Create Account</button>
-                </div>
+                </form>
                 <div class="auth-footer">
                     Already have an account? <a id="go-login">Login here</a>
                 </div>
