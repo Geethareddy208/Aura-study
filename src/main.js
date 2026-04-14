@@ -27,9 +27,10 @@ let currentMode = 'pomodoro'; // 'pomodoro', 'short', 'long'
 // Audio State
 let ambientAudio = null;
 const AMBIENT_SOUNDS = {
-    'Rain': 'https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3',
-    'Cafe': 'https://assets.mixkit.co/active_storage/sfx/2085/2085-preview.mp3',
-    'Forest': 'https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'
+    'Rain': 'https://www.soundjay.com/nature/rain-01.mp3',
+    'River': 'https://www.soundjay.com/nature/river-1.mp3',
+    'Nature': 'https://assets.mixkit.co/active_storage/sfx/12/12-preview.mp3',
+    'Lofi': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3'
 };
 
 // Sync Logic
@@ -396,13 +397,14 @@ const views = {
                     <div class="option-item">
                         <div class="option-info">
                             <strong>Ambient Sound</strong>
-                            <span>Rain / Forest / Cafe</span>
+                            <span>Pleasant nature loops</span>
                         </div>
                         <select id="ambient-select" style="background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--surface-border); border-radius: 4px; padding: 4px 8px;">
                             <option value="None">None</option>
-                            <option value="Rain">Heavy Rain</option>
-                            <option value="Cafe">Cozy Cafe</option>
-                            <option value="Forest">Nature Ambient</option>
+                            <option value="Rain">🌦️ Falling Rain</option>
+                            <option value="River">🌊 River Flow</option>
+                            <option value="Nature">🍃 Nature Medley</option>
+                            <option value="Lofi">🎧 Lo-Fi Study</option>
                         </select>
                     </div>
                 </div>
