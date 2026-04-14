@@ -34,7 +34,9 @@ git push -u origin main
 ## Step 3: Deploy to Vercel
 1. Go to [Vercel.com](https://vercel.com/) and sign up with GitHub.
 2. Select your `aura-study` repository.
-3. Add your `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the **Environment Variables** section.
+3. Click on the **"Environment Variables"** section and add these two:
+   - `VITE_SUPABASE_URL`: `https://zabsekqtajqawoqwtqzb.supabase.co`
+   - `VITE_SUPABASE_ANON_KEY`: `sb_publishable_2mFtRNzaRDIwu-gPlvVzD952XbYndW`
 4. Click **Deploy**.
 
 ## Access

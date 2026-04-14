@@ -57,18 +57,34 @@ const saveNote = async (title, content, status) => {
 // Auth Handlers
 const handleSignUp = async (email, password, username) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) return alert(error.message);
+    if (error) {
+        console.error('Signup Error:', error);
+        return alert('Signup Failed: ' + error.message);
+    }
     
-    // Create profile
-    currentUser = data.user;
-    userData.username = username;
-    await pushUserData();
-    switchView('dashboard');
+    if (data.user) {
+        currentUser = data.user;
+        userData.username = username;
+        
+        try {
+            await pushUserData();
+            switchView('dashboard');
+        } catch (syncError) {
+            console.error('Profile Sync Error:', syncError);
+            alert('Account created, but could not setup profile. Please ensure you have run the SQL script in Supabase.');
+            switchView('dashboard'); // Still try to go to dashboard
+        }
+    } else {
+        alert('Please check your email to confirm your account before logging in!');
+    }
 };
 
 const handleLogin = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return alert(error.message);
+    if (error) {
+        console.error('Login Error:', error);
+        return alert('Login Failed: ' + error.message);
+    }
     currentUser = data.user;
     await fetchUserData();
     switchView('dashboard');
