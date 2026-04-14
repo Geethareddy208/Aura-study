@@ -4,7 +4,7 @@
 // VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://zabsekqtajqawoqwtqzb.supabase.co';
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_2mFtRNzaRDIwu-gPlvVzD952XbYndW';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_2mFtRNzaRDIwu-gDy0vYrA_5l_ay-LC';
 
 let supabaseClient = null;
 
