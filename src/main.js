@@ -49,6 +49,69 @@ const pushUserData = async () => {
         .upsert({ id: currentUser.id, ...userData });
 };
 
+// Daily Tasks Logic
+const fetchDailyTasks = async () => {
+    if (!currentUser) return;
+    const today = new Date().toISOString().split('T')[0];
+    const { data, error } = await supabase
+        .from('daily_tasks')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .eq('for_date', today);
+    if (data) {
+        dailyTasks = data;
+        await calculateDailyProgress();
+    }
+};
+
+const addDailyTask = async (taskName, startTime) => {
+    if (!currentUser) return;
+    const today = new Date().toISOString().split('T')[0];
+    const { error } = await supabase
+        .from('daily_tasks')
+        .insert({
+            user_id: currentUser.id,
+            task_name: taskName,
+            start_time: startTime,
+            for_date: today
+        });
+    await fetchDailyTasks();
+    if (document.getElementById('daily-timetable-slots')) {
+        switchView('planner');
+    }
+};
+
+const toggleTask = async (taskId, isCompleted) => {
+    if (!currentUser) return;
+    const { error } = await supabase
+        .from('daily_tasks')
+        .update({ is_completed: !isCompleted })
+        .eq('id', taskId);
+    await fetchDailyTasks();
+    if (document.getElementById('daily-timetable-slots')) {
+        switchView('planner');
+    }
+};
+
+const calculateDailyProgress = async () => {
+    if (dailyTasks.length === 0) {
+        userData.goal_completion = 0;
+    } else {
+        const completed = dailyTasks.filter(t => t.is_completed).length;
+        userData.goal_completion = Math.round((completed / dailyTasks.length) * 100);
+        
+        // If 100% completed, add today's date to completed_days if not already there
+        if (userData.goal_completion === 100) {
+            const today = new Date().getDate();
+            if (!userData.completed_days.includes(today)) {
+                userData.completed_days.push(today);
+                userData.streak += 1; // Increment streak locally
+            }
+        }
+    }
+    await pushUserData();
+};
+
 const saveStudySession = async (duration, subject) => {
     if (!currentUser) return;
     const { error } = await supabase
