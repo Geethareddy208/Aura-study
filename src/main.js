@@ -88,14 +88,12 @@ const addDailyTask = async (taskName, startTime) => {
     }
 };
 
-const cycleTaskStatus = async (taskId, currentStatus) => {
+const setTaskStatus = async (taskId, newStatus) => {
     if (!currentUser) return;
-    const states = ['Pending', 'Progress', 'Done'];
-    const nextStatus = states[(states.indexOf(currentStatus) + 1) % states.length];
     
     const { error } = await supabase
         .from('daily_tasks')
-        .update({ status: nextStatus })
+        .update({ status: newStatus })
         .eq('id', taskId);
     
     if (error) {
@@ -356,18 +354,17 @@ const generatePlannerHTML = () => {
                     ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
                         dailyTasks.map(task => `
                             <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
-                                <div class="status-indicator status-${task.status.toLowerCase()}" 
-                                     data-id="${task.id}" 
-                                     data-status="${task.status}" 
-                                     style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--surface-border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; background: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'transparent')}">
-                                     ${task.status === 'Done' ? '✓' : (task.status === 'Progress' ? '½' : '')}
+                                <div class="status-options" style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; cursor: pointer; color: ${task.status === 'Pending' ? 'var(--text-main)' : 'var(--text-muted)'}">
+                                        <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--primary);"> Pending
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; cursor: pointer; color: ${task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)'}">
+                                        <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--accent);"> In Progress
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; cursor: pointer; color: ${task.status === 'Done' ? 'var(--secondary)' : 'var(--text-muted)'}">
+                                        <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--secondary);"> Done
+                                    </label>
                                 </div>
-                                <div style="flex: 1;">
-                                    <div style="font-size: 0.9rem; font-weight: 500;">${task.task_name}</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${task.start_time || 'No time set'} - ${task.status}</div>
-                                </div>
-                                <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
-                                   style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 16px;"></i>
                             </div>
                         `).join('')
                     }
@@ -844,11 +841,11 @@ const switchView = (viewName) => {
                 }
             });
 
-            document.querySelectorAll('.status-indicator').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const id = e.currentTarget.dataset.id;
-                    const status = e.currentTarget.dataset.status;
-                    await cycleTaskStatus(id, status);
+            document.querySelectorAll('.status-radio').forEach(radio => {
+                radio.addEventListener('change', async (e) => {
+                    const id = e.target.dataset.id;
+                    const status = e.target.value;
+                    await setTaskStatus(id, status);
                 });
             });
         }
