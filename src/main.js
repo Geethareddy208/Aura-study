@@ -73,20 +73,36 @@ const addDailyTask = async (taskName, startTime) => {
             user_id: currentUser.id,
             task_name: taskName,
             start_time: startTime,
-            for_date: today
+            for_date: today,
+            status: 'Pending'
         });
+    
+    if (error) {
+        console.error('Add Task Error:', error);
+        alert('Failed to add task. Did you run the SQL script?');
+    }
+
     await fetchDailyTasks();
     if (document.getElementById('daily-timetable-slots')) {
         switchView('planner');
     }
 };
 
-const toggleTask = async (taskId, isCompleted) => {
+const cycleTaskStatus = async (taskId, currentStatus) => {
     if (!currentUser) return;
+    const states = ['Pending', 'Progress', 'Done'];
+    const nextStatus = states[(states.indexOf(currentStatus) + 1) % states.length];
+    
     const { error } = await supabase
         .from('daily_tasks')
-        .update({ is_completed: !isCompleted })
+        .update({ status: nextStatus })
         .eq('id', taskId);
+    
+    if (error) {
+        console.error('Update Task Error:', error);
+        alert('Could not update task status.');
+    }
+
     await fetchDailyTasks();
     if (document.getElementById('daily-timetable-slots')) {
         switchView('planner');
@@ -97,15 +113,20 @@ const calculateDailyProgress = async () => {
     if (dailyTasks.length === 0) {
         userData.goal_completion = 0;
     } else {
-        const completed = dailyTasks.filter(t => t.is_completed).length;
-        userData.goal_completion = Math.round((completed / dailyTasks.length) * 100);
+        let totalWeight = 0;
+        dailyTasks.forEach(t => {
+            if (t.status === 'Done') totalWeight += 1;
+            else if (t.status === 'Progress') totalWeight += 0.5;
+        });
+        
+        userData.goal_completion = Math.round((totalWeight / dailyTasks.length) * 100);
         
         // If 100% completed, add today's date to completed_days if not already there
         if (userData.goal_completion === 100) {
             const today = new Date().getDate();
             if (!userData.completed_days.includes(today)) {
                 userData.completed_days.push(today);
-                userData.streak += 1; // Increment streak locally
+                userData.streak += 1;
             }
         }
     }
@@ -498,13 +519,19 @@ const views = {
                 <div class="time-slots" id="daily-timetable-slots">
                     ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
                         dailyTasks.map(task => `
-                            <div class="task-item ${task.is_completed ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
-                                <input type="checkbox" class="task-checkbox" data-id="${task.id}" ${task.is_completed ? 'checked' : ''} style="cursor: pointer;">
+                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
+                                <div class="status-indicator status-${task.status.toLowerCase()}" 
+                                     data-id="${task.id}" 
+                                     data-status="${task.status}" 
+                                     style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--surface-border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px;">
+                                     ${task.status === 'Done' ? '✓' : (task.status === 'Progress' ? '½' : '')}
+                                </div>
                                 <div style="flex: 1;">
                                     <div style="font-size: 0.9rem; font-weight: 500;">${task.task_name}</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${task.start_time || 'No time set'}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${task.start_time || 'No time set'} - ${task.status}</div>
                                 </div>
-                                <i data-lucide="check-circle" style="color: ${task.is_completed ? 'var(--secondary)' : 'transparent'}; width: 16px;"></i>
+                                <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
+                                   style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 16px;"></i>
                             </div>
                         `).join('')
                     }
@@ -803,11 +830,11 @@ const switchView = (viewName) => {
                 }
             });
 
-            document.querySelectorAll('.task-checkbox').forEach(cb => {
-                cb.addEventListener('change', async (e) => {
-                    const id = e.target.dataset.id;
-                    const task = dailyTasks.find(t => t.id === id);
-                    await toggleTask(id, task.is_completed);
+            document.querySelectorAll('.status-indicator').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    const status = e.currentTarget.dataset.status;
+                    await cycleTaskStatus(id, status);
                 });
             });
         }
