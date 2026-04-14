@@ -15,14 +15,12 @@ let userData = {
     streak: 0,
     goal_completion: 0,
     aura_points: 0,
-    username: ''
+    username: '',
+    completed_days: [] // Array of day numbers or ISO dates
 };
 
-// Timer State
-let timerInterval = null;
-let timeLeft = 25 * 60;
-let timerRunning = false;
-let currentMode = 'pomodoro'; // 'pomodoro', 'short', 'long'
+// State for Daily Tasks
+let dailyTasks = [];
 
 // Audio State
 let ambientAudio = null;
@@ -219,10 +217,10 @@ const generateCalendarHTML = () => {
     
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = now.getDate();
+    const todayDate = now.getDate();
     
-    // Completed days will be fetched from database in a real scenario
-    const completedDays = []; 
+    // Use userData.completed_days for rendering
+    const completedDays = userData.completed_days || []; 
 
     let calendarHTML = `
         <div class="calendar-header">
@@ -249,7 +247,7 @@ const generateCalendarHTML = () => {
 
     // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-        const isToday = day === today ? 'today' : '';
+        const isToday = day === todayDate ? 'today' : '';
         const isCompleted = completedDays.includes(day) ? 'completed' : '';
         calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}">${day}</div>`;
     }
@@ -279,8 +277,8 @@ const views = {
                     <i data-lucide="flame" class="icon-streak"></i>
                     <span>Current Streak</span>
                 </div>
-                <div class="stat-value">0 Days</div>
-                <div class="stat-footer">Start your first session!</div>
+                <div class="stat-value">${userData.streak} Days</div>
+                <div class="stat-footer">${userData.streak > 0 ? 'Amazing consistency!' : 'Start your first session!'}</div>
             </div>
             
             <div class="card stat-card">
@@ -288,11 +286,11 @@ const views = {
                     <i data-lucide="target" class="icon-goal"></i>
                     <span>Daily Goal</span>
                 </div>
-                <div class="stat-value">0%</div>
+                <div class="stat-value">${userData.goal_completion}%</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
+                    <div class="progress-fill" style="width: ${userData.goal_completion}%"></div>
                 </div>
-                <div class="stat-footer">0h / 6h studied</div>
+                <div class="stat-footer">${userData.goal_completion === 100 ? 'Goal Completed! 🏆' : 'Keep pushing!'}</div>
             </div>
 
             <div class="card stat-card">
@@ -430,9 +428,23 @@ const views = {
         </div>
         <div class="planner-grid">
             <div class="card timetable">
-                <h3>Daily Timetable</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3>Daily Timetable</h3>
+                    <button class="btn btn-primary btn-small" id="add-task-btn"><i data-lucide="plus"></i> Add Task</button>
+                </div>
                 <div class="time-slots" id="daily-timetable-slots">
-                    <div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>
+                    ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
+                        dailyTasks.map(task => `
+                            <div class="task-item ${task.is_completed ? 'completed' : ''}" style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--surface-border);">
+                                <input type="checkbox" class="task-checkbox" data-id="${task.id}" ${task.is_completed ? 'checked' : ''} style="cursor: pointer;">
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 500;">${task.task_name}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${task.start_time || 'No time set'}</div>
+                                </div>
+                                <i data-lucide="check-circle" style="color: ${task.is_completed ? 'var(--secondary)' : 'transparent'}; width: 16px;"></i>
+                            </div>
+                        `).join('')
+                    }
                 </div>
             </div>
             <div class="card exam-countdown">
@@ -720,7 +732,21 @@ const switchView = (viewName) => {
 
         // Planner Logic
         if (viewName === 'planner') {
-            // Simplified: Refresh timetable display logic could go here
+            document.getElementById('add-task-btn')?.addEventListener('click', async () => {
+                const name = prompt('What is the task?');
+                if (name) {
+                    const time = prompt('What time? (e.g. 09:00 AM)', 'Today');
+                    await addDailyTask(name, time);
+                }
+            });
+
+            document.querySelectorAll('.task-checkbox').forEach(cb => {
+                cb.addEventListener('change', async (e) => {
+                    const id = e.target.dataset.id;
+                    const task = dailyTasks.find(t => t.id === id);
+                    await toggleTask(id, task.is_completed);
+                });
+            });
         }
 
         // Auth Form Listeners
@@ -775,6 +801,7 @@ const initApp = async () => {
         if (session) {
             currentUser = session.user;
             await fetchUserData();
+            await fetchDailyTasks(); // Load today's tasks
             switchView('dashboard');
         } else {
             switchView('login');
