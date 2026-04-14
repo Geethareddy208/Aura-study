@@ -272,12 +272,8 @@ const views = {
                 
                 <div class="deadline-alerts" style="margin-top: 3rem; text-align: left;">
                     <h4 style="margin-bottom: 1rem;">Coming Up Next</h4>
-                    <div class="deadline-item">
-                        <div class="deadline-info">
-                            <span class="deadline-name">Chemistry Lab Draft</span>
-                            <span class="deadline-sub">Due in 2 hours</span>
-                        </div>
-                        <i data-lucide="bell" style="color: var(--accent)"></i>
+                    <div style="border: 1px dashed var(--surface-border); padding: 1rem; border-radius: 0.75rem; color: var(--text-muted); font-size: 0.8rem; text-align: center;">
+                        No pending deadlines
                     </div>
                 </div>
             </div>
@@ -287,9 +283,9 @@ const views = {
                     <h3>Focus Pulse</h3>
                     <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Current Energy Level</p>
                     <div class="energy-meter">
-                        <div class="energy-step active"></div>
-                        <div class="energy-step active"></div>
-                        <div class="energy-step active"></div>
+                        <div class="energy-step"></div>
+                        <div class="energy-step"></div>
+                        <div class="energy-step"></div>
                         <div class="energy-step"></div>
                         <div class="energy-step"></div>
                     </div>
@@ -352,24 +348,13 @@ const views = {
                 <div class="setting-group">
                     <h3>Exam Countdown</h3>
                     <div class="deadline-list">
-                        <div class="deadline-item">
-                            <div class="deadline-info">
-                                <span class="deadline-name">Final Exams</span>
-                                <span class="deadline-sub">June 2026</span>
-                            </div>
-                            <span class="days-left">12 Days</span>
-                        </div>
-                        <div class="deadline-item">
-                            <div class="deadline-info">
-                                <span class="deadline-name">Physics Midterm</span>
-                                <span class="deadline-sub">Friday</span>
-                            </div>
-                            <span class="days-left">04 Days</span>
+                        <div style="border: 1px dashed var(--surface-border); padding: 1.5rem; border-radius: 1rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+                            No upcoming exams tracked
                         </div>
                     </div>
                 </div>
-                <div class="card" style="margin-top: 1rem; background: rgba(255,180,162, 0.1);">
-                    <p style="font-size: 0.85rem;"><i data-lucide="info" style="width: 14px; vertical-align: middle;"></i> Tip: Revision phase starts in 2 days.</p>
+                <div class="card" style="margin-top: 1rem; background: rgba(148, 163, 184, 0.05);">
+                    <p style="font-size: 0.85rem;"><i data-lucide="info" style="width: 14px; vertical-align: middle;"></i> New exams can be added in the Vault.</p>
                 </div>
             </div>
         </div>
@@ -389,7 +374,7 @@ const views = {
             <div class="card">
                 <h3>Peak Activity</h3>
                 <div class="heatmap-grid" style="display: grid; grid-template-columns: repeat(24, 1fr); gap: 4px; height: 100px; margin-top: 2rem;">
-                    ${Array(24).fill(0).map(() => `<div style="background: var(--primary); opacity: ${Math.random()}; border-radius: 2px;"></div>`).join('')}
+                    ${Array(24).fill(0).map(() => `<div style="background: var(--primary); opacity: 0.05; border-radius: 2px;"></div>`).join('')}
                 </div>
             </div>
         </div>
@@ -458,7 +443,7 @@ const views = {
                     <div class="option-item">
                         <div class="option-info">
                             <strong>Cloud Sync Status</strong>
-                            <span style="color: #10b981;">● Synced 2m ago</span>
+                            <span style="color: var(--text-muted);">● Never Synced</span>
                         </div>
                         <button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Sync Now</button>
                     </div>
