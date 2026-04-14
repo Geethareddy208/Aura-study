@@ -353,8 +353,8 @@ const generateCalendarHTML = () => {
     for (let day = 1; day <= daysInMonth; day++) {
         const isToday = day === todayDate ? 'today' : '';
         const isCompleted = completedDays.includes(day) ? 'completed' : '';
-        // In the noir theme, completed days are pure white
-        calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}" style="${isCompleted ? 'background: #FFFFFF; color: #000000;' : ''}">${day}</div>`;
+        // In the borderless noir theme, completed days get a white background
+        calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}" style="${isCompleted ? 'background: #FFFFFF; color: #000000; border-radius: 50%;' : ''}">${day}</div>`;
     }
 
     calendarHTML += '</div>';
@@ -387,7 +387,7 @@ const generateDashboardHTML = () => {
 
     const chartHTML = last7Days.map(dayDate => {
         const isCompleted = userData.completed_days.includes(dayDate);
-        return `<div class="bar" style="height: ${isCompleted ? '100%' : '15%'}; background: white; border: 1px solid white;"></div>`;
+        return `<div class="bar" style="height: ${isCompleted ? '100%' : '15%'}; background: white;"></div>`;
     }).join('');
 
     return `
@@ -404,15 +404,15 @@ const generateDashboardHTML = () => {
         </div>
 
         <div class="grid-container" style="margin-top: 1.5rem;">
-            <div class="card" style="background: black; border: 1px solid white; color: white;">
+            <div class="card" style="background: black; color: white;">
                 <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">🔥 Current Streak</div>
                 <div style="font-size: 1.5rem; font-weight: 700;">${userData.streak} Days</div>
             </div>
-            <div class="card" style="background: black; border: 1px solid white; color: white;">
+            <div class="card" style="background: black; color: white;">
                 <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">🎯 Daily Goal</div>
                 <div style="font-size: 1.5rem; font-weight: 700;">${userData.goal_completion}%</div>
             </div>
-            <div class="card" style="background: black; border: 1px solid white; color: white;">
+            <div class="card" style="background: black; color: white;">
                 <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">✨ Aura Points</div>
                 <div style="font-size: 1.5rem; font-weight: 700;">${userData.aura_points}</div>
             </div>
@@ -455,7 +455,7 @@ const generatePlannerHTML = () => {
                 <div class="time-slots" id="daily-timetable-slots">
                     ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
                         dailyTasks.map(task => `
-                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem; background: black; color: white; margin-bottom: 1.5rem; border: 1px solid white;">
+                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem 0; background: black; color: white; margin-bottom: 1.5rem; border-bottom: 1px solid #333;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                     <div style="flex: 1;">
                                         <div style="font-size: 1rem; font-weight: 600; color: white;">${task.task_name}</div>
@@ -470,14 +470,14 @@ const generatePlannerHTML = () => {
                                         </button>
                                     </div>
                                 </div>
-                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.75rem; background: #000; padding: 0.75rem 1rem; border: 1px solid white;">
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Pending' ? '2px solid white' : '1px solid #333'}; padding: 4px 8px; border-radius: 4px;">
+                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.75rem; background: #000; padding: 0.75rem 0;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; text-decoration: ${task.status === 'Pending' ? 'underline' : 'none'}; font-weight: ${task.status === 'Pending' ? 'bold' : 'normal'};">
                                         <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: white;"> Pending
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Progress' ? '2px solid white' : '1px solid #333'}; padding: 4px 8px; border-radius: 4px;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; text-decoration: ${task.status === 'Progress' ? 'underline' : 'none'}; font-weight: ${task.status === 'Progress' ? 'bold' : 'normal'};">
                                         <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: white;"> In Progress
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Done' ? '2px solid white' : '1px solid #333'}; padding: 4px 8px; border-radius: 4px;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; text-decoration: ${task.status === 'Done' ? 'underline' : 'none'}; font-weight: ${task.status === 'Done' ? 'bold' : 'normal'};">
                                         <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: white;"> Done
                                     </label>
                                 </div>
