@@ -12,10 +12,10 @@ const initIcons = () => {
 let currentUser = null;
 let studySessions = [];
 let userData = {
-    streak: 7,
-    goal_completion: 75,
-    aura_points: 1250,
-    username: 'scholar'
+    streak: 0,
+    goal_completion: 0,
+    aura_points: 0,
+    username: ''
 };
 
 // Sync Logic
@@ -132,8 +132,8 @@ const generateCalendarHTML = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const today = now.getDate();
     
-    // Mock completed days (simulating historical data)
-    const completedDays = [1, 2, 4, 5, 7, 8, 9, 11, 12, 14, 15]; 
+    // Completed days will be fetched from database in a real scenario
+    const completedDays = []; 
 
     let calendarHTML = `
         <div class="calendar-header">
@@ -183,8 +183,8 @@ const views = {
                     <i data-lucide="flame" class="icon-streak"></i>
                     <span>Current Streak</span>
                 </div>
-                <div class="stat-value">7 Days</div>
-                <div class="stat-footer">Consistency is key!</div>
+                <div class="stat-value">0 Days</div>
+                <div class="stat-footer">Start your first session!</div>
             </div>
             
             <div class="card stat-card">
@@ -192,11 +192,11 @@ const views = {
                     <i data-lucide="target" class="icon-goal"></i>
                     <span>Daily Goal</span>
                 </div>
-                <div class="stat-value">75%</div>
+                <div class="stat-value">0%</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%"></div>
+                    <div class="progress-fill" style="width: 0%"></div>
                 </div>
-                <div class="stat-footer">4.5h / 6h studied</div>
+                <div class="stat-footer">0h / 6h studied</div>
             </div>
 
             <div class="card stat-card">
@@ -204,8 +204,8 @@ const views = {
                     <i data-lucide="award" class="icon-points"></i>
                     <span>Aura Points</span>
                 </div>
-                <div class="stat-value">1,250</div>
-                <div class="stat-footer">250 points to next level</div>
+                <div class="stat-value">0</div>
+                <div class="stat-footer">Earn points by studying</div>
             </div>
         </div>
 
@@ -235,21 +235,9 @@ const views = {
 
         <div class="card side-list" style="margin-top: 1.5rem;">
             <h3>Today's Subjects</h3>
-            <ul class="subject-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                <li>
-                    <span class="subject-dot math"></span>
-                    <span class="subject-name">Advanced Calculus</span>
-                    <span class="subject-time">2h 15m</span>
-                </li>
-                <li>
-                    <span class="subject-dot physics"></span>
-                    <span class="subject-name">Quantum Mechanics</span>
-                    <span class="subject-time">1h 45m</span>
-                </li>
-                <li>
-                    <span class="subject-dot chem"></span>
-                    <span class="subject-name">Organic Chemistry</span>
-                    <span class="subject-time">45m</span>
+            <ul class="subject-list" id="today-subjects-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <li style="border: 1px dashed var(--surface-border); background: transparent; justify-content: center; color: var(--text-muted); font-size: 0.8rem;">
+                    No subjects tracked today yet
                 </li>
             </ul>
         </div>
@@ -356,11 +344,8 @@ const views = {
         <div class="planner-grid">
             <div class="card timetable">
                 <h3>Daily Timetable</h3>
-                <div class="time-slots">
-                    <div class="slot"><span>08:00</span> <div class="task active math">Calculus Revision</div></div>
-                    <div class="slot"><span>09:00</span> <div class="task active math">Problem Set 4</div></div>
-                    <div class="slot"><span>10:00</span> <div class="task break">Coffee Break</div></div>
-                    <div class="slot"><span>11:00</span> <div class="task active physics">Thermodynamics</div></div>
+                <div class="time-slots" id="daily-timetable-slots">
+                    <div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>
                 </div>
             </div>
             <div class="card exam-countdown">
@@ -419,16 +404,9 @@ const views = {
                 <h3>Study Notes</h3>
                 <button class="btn btn-primary"><i data-lucide="plus"></i> New Note</button>
             </div>
-            <div class="notes-grid">
-                <div class="note-card">
-                    <h4>Vector Calculus</h4>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Last edited 2h ago</p>
-                    <span class="tag">Revision Done</span>
-                </div>
-                <div class="note-card">
-                    <h4>Nervous System</h4>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Last edited yesterday</p>
-                    <span class="tag pending">Pending</span>
+            <div class="notes-grid" id="vault-notes-grid">
+                <div class="note-card" style="border: 1px dashed var(--surface-border); background: transparent; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 100px; color: var(--text-muted);">
+                    Your vault is empty. Click "New Note" to begin.
                 </div>
             </div>
         </div>
