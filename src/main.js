@@ -24,6 +24,14 @@ let timeLeft = 25 * 60;
 let timerRunning = false;
 let currentMode = 'pomodoro'; // 'pomodoro', 'short', 'long'
 
+// Audio State
+let ambientAudio = null;
+const AMBIENT_SOUNDS = {
+    'Rain': 'https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3',
+    'Cafe': 'https://assets.mixkit.co/active_storage/sfx/2085/2085-preview.mp3',
+    'Forest': 'https://assets.mixkit.co/active_storage/sfx/1110/1110-preview.mp3'
+};
+
 // Sync Logic
 const fetchUserData = async () => {
     if (!currentUser) return;
@@ -106,6 +114,32 @@ const updateTimerDisplay = () => {
     const mins = Math.floor(timeLeft / 60);
     const secs = timeLeft % 60;
     display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
+
+// Audio Functions
+const toggleAmbientSound = (soundName, volume) => {
+    if (ambientAudio) {
+        ambientAudio.pause();
+    }
+
+    if (soundName === 'None') {
+        ambientAudio = null;
+        return;
+    }
+
+    const url = AMBIENT_SOUNDS[soundName];
+    if (url) {
+        ambientAudio = new Audio(url);
+        ambientAudio.loop = true;
+        ambientAudio.volume = volume / 100;
+        ambientAudio.play().catch(e => console.log('Audio Autoplay blocked. Interaction required first.'));
+    }
+};
+
+const updateVolume = (volume) => {
+    if (ambientAudio) {
+        ambientAudio.volume = volume / 100;
+    }
 };
 
 // Auth Handlers
@@ -362,12 +396,13 @@ const views = {
                     <div class="option-item">
                         <div class="option-info">
                             <strong>Ambient Sound</strong>
-                            <span>Rain / Forest / White Noise</span>
+                            <span>Rain / Forest / Cafe</span>
                         </div>
-                        <select style="background: transparent; color: var(--text-main); border: 1px solid var(--surface-border); border-radius: 4px; padding: 2px 5px;">
-                            <option>Heavy Rain</option>
-                            <option>Cozy Cafe</option>
-                            <option>Nature Ambient</option>
+                        <select id="ambient-select" style="background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--surface-border); border-radius: 4px; padding: 4px 8px;">
+                            <option value="None">None</option>
+                            <option value="Rain">Heavy Rain</option>
+                            <option value="Cafe">Cozy Cafe</option>
+                            <option value="Forest">Nature Ambient</option>
                         </select>
                     </div>
                 </div>
@@ -637,6 +672,27 @@ const switchView = (viewName) => {
                     currentMode = modeSpan.textContent.toLowerCase().replace(' ', '');
                     resetTimer();
                 });
+            });
+
+            // Timer Customization
+            document.querySelector('.timer-display')?.addEventListener('click', () => {
+                const newMins = prompt('Set study time (minutes):', Math.floor(timeLeft / 60));
+                if (newMins && !isNaN(newMins)) {
+                    timeLeft = parseInt(newMins) * 60;
+                    updateTimerDisplay();
+                }
+            });
+
+            // Ambient Audio Controls
+            const ambientSelect = document.getElementById('ambient-select');
+            const volumeSlider = document.querySelector('.music-controls input');
+            
+            ambientSelect?.addEventListener('change', (e) => {
+                toggleAmbientSound(e.target.value, volumeSlider.value);
+            });
+            
+            volumeSlider?.addEventListener('input', (e) => {
+                updateVolume(e.target.value);
             });
 
             // Energy Pulse
