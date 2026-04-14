@@ -27,10 +27,10 @@ let currentMode = 'pomodoro'; // 'pomodoro', 'short', 'long'
 // Audio State
 let ambientAudio = null;
 const AMBIENT_SOUNDS = {
-    'Rain': 'https://www.soundjay.com/nature/rain-01.mp3',
-    'River': 'https://www.soundjay.com/nature/river-1.mp3',
-    'Nature': 'https://assets.mixkit.co/active_storage/sfx/12/12-preview.mp3',
-    'Lofi': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3'
+    'Rain': 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_61a1367096.mp3?filename=rain-on-window-17559.mp3',
+    'River': 'https://cdn.pixabay.com/download/audio/2021/09/06/audio_f5cd3e1467.mp3?filename=river-stream-relaxed-6825.mp3',
+    'Nature': 'https://cdn.pixabay.com/download/audio/2021/08/09/audio_8844cc6e9b.mp3?filename=forest-birds-and-creek-6447.mp3',
+    'Piano': 'https://cdn.pixabay.com/download/audio/2022/11/06/audio_c3a6e9d6c7.mp3?filename=be-calm-121634.mp3'
 };
 
 // Sync Logic
@@ -397,14 +397,14 @@ const views = {
                     <div class="option-item">
                         <div class="option-info">
                             <strong>Ambient Sound</strong>
-                            <span>Pleasant nature loops</span>
+                            <span>High-fidelity nature loops</span>
                         </div>
                         <select id="ambient-select" style="background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--surface-border); border-radius: 4px; padding: 4px 8px;">
                             <option value="None">None</option>
-                            <option value="Rain">🌦️ Falling Rain</option>
-                            <option value="River">🌊 River Flow</option>
-                            <option value="Nature">🍃 Nature Medley</option>
-                            <option value="Lofi">🎧 Lo-Fi Study</option>
+                            <option value="Rain">🌧️ Rain on Window</option>
+                            <option value="River">🌊 Gentle Stream</option>
+                            <option value="Nature">🍃 Forest Birds</option>
+                            <option value="Piano">🎹 Relaxing Piano</option>
                         </select>
                     </div>
                 </div>
