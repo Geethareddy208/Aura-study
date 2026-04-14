@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aura Study - Daily Tracker</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1c1c18">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/aura_study_pwa_icon.png">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar">
+        <div class="logo">
+          <i data-lucide="zap"></i>
+          <span>Aura Study</span>
+        </div>
+        <nav class="nav-links">
+          <a class="nav-item active" data-view="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+          </a>
+          <a class="nav-item" data-view="focus">
+            <i data-lucide="timer"></i>
+            <span>Focus Center</span>
+          </a>
+          <a class="nav-item" data-view="planner">
+            <i data-lucide="calendar"></i>
+            <span>Planner</span>
+          </a>
+          <a class="nav-item" data-view="insights">
+            <i data-lucide="bar-chart-3"></i>
+            <span>Insights</span>
+          </a>
+          <a class="nav-item" data-view="vault">
+            <i data-lucide="book-open"></i>
+            <span>Notes & Vault</span>
+          </a>
+          <a class="nav-item" data-view="settings">
+            <i data-lucide="settings"></i>
+            <span>Settings</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-layout">
+        <header>
+          <div class="hamburger" id="menu-toggle">
+            <i data-lucide="menu"></i>
+          </div>
+          <div class="search-bar">
+            <!-- Placeholder for search or page title -->
+            <h2 id="page-title">Dashboard</h2>
+          </div>
+          <div class="date-time-display">
+            <span class="current-time" id="clock">00:00:00</span>
+            <span class="current-date" id="date">Tuesday, April 14</span>
+          </div>
+        </header>
+
+        <main class="content-area" id="main-content">
+          <!-- Views will be injected here -->
+        </main>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js?v=2"></script>
+  </body>
+</html>
