@@ -338,6 +338,80 @@ const generateCalendarHTML = () => {
     return calendarHTML;
 };
 
+const generateDashboardHTML = () => {
+    return `
+        <div class="view-header">
+            <h1>Welcome back, ${userData.username || 'scholar'}</h1>
+            <p>You've maintained a ${userData.streak}-day streak! Keep it up.</p>
+        </div>
+        
+        <div class="card activity-card" style="margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 1.5rem;">Study Activity</h3>
+            <div id="activity-calendar-container">
+                ${generateCalendarHTML()}
+            </div>
+        </div>
+
+        <div class="grid-container" style="margin-top: 1.5rem;">
+            <div class="card stat-card">
+                <div class="stat-header">
+                    <i data-lucide="flame" class="icon-streak"></i>
+                    <span>Current Streak</span>
+                </div>
+                <div class="stat-value">${userData.streak} Days</div>
+                <div class="stat-footer">${userData.streak > 0 ? 'Amazing consistency!' : 'Start your first session!'}</div>
+            </div>
+            
+            <div class="card stat-card">
+                <div class="stat-header">
+                    <i data-lucide="target" class="icon-goal"></i>
+                    <span>Daily Goal</span>
+                </div>
+                <div class="stat-value">${userData.goal_completion}%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${userData.goal_completion}%"></div>
+                </div>
+                <div class="stat-footer">${userData.goal_completion === 100 ? 'Goal Completed! 🏆' : 'Keep pushing!'}</div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-header">
+                    <i data-lucide="award" class="icon-points"></i>
+                    <span>Aura Points</span>
+                </div>
+                <div class="stat-value">${userData.aura_points}</div>
+                <div class="stat-footer">Earn points by studying</div>
+            </div>
+        </div>
+
+        <div class="section-row" style="grid-template-columns: 1fr 1fr; margin-top: 1.5rem;">
+            <div class="card main-stats">
+              <h3>Weekly Performance</h3>
+              <div class="chart-placeholder">
+                  <div class="bar-chart">
+                      <div class="bar" style="height: 40%"></div>
+                      <div class="bar" style="height: 60%"></div>
+                      <div class="bar" style="height: 80%"></div>
+                      <div class="bar" style="height: 50%"></div>
+                      <div class="bar" style="height: 90%"></div>
+                      <div class="bar" style="height: 70%"></div>
+                      <div class="bar" style="height: 30%"></div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="card side-list">
+                <h3>Today's Subjects</h3>
+                <ul class="subject-list" id="today-subjects-list" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                    <li style="border: 1px dashed var(--surface-border); background: transparent; justify-content: center; color: var(--text-muted); font-size: 0.8rem;">
+                        No subjects tracked today yet
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+};
+
 const generatePlannerHTML = () => {
     return `
         <div class="view-header">
@@ -398,75 +472,7 @@ const generatePlannerHTML = () => {
 // View Management
 const views = {
     dashboard: `
-        <div class="view-header">
-            <h1>Welcome back, {{username}}</h1>
-            <p>You've maintained a 7-day streak! Keep it up.</p>
-        </div>
-        
-        <div class="card activity-card" style="margin-top: 1.5rem;">
-            <h3 style="margin-bottom: 1.5rem;">Study Activity</h3>
-            <div id="activity-calendar-container">
-                <!-- Calendar injected here -->
-            </div>
-        </div>
-
-        <div class="grid-container" style="margin-top: 1.5rem;">
-            <div class="card stat-card">
-                <div class="stat-header">
-                    <i data-lucide="flame" class="icon-streak"></i>
-                    <span>Current Streak</span>
-                </div>
-                <div class="stat-value">${userData.streak} Days</div>
-                <div class="stat-footer">${userData.streak > 0 ? 'Amazing consistency!' : 'Start your first session!'}</div>
-            </div>
-            
-            <div class="card stat-card">
-                <div class="stat-header">
-                    <i data-lucide="target" class="icon-goal"></i>
-                    <span>Daily Goal</span>
-                </div>
-                <div class="stat-value">${userData.goal_completion}%</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${userData.goal_completion}%"></div>
-                </div>
-                <div class="stat-footer">${userData.goal_completion === 100 ? 'Goal Completed! 🏆' : 'Keep pushing!'}</div>
-            </div>
-
-            <div class="card stat-card">
-                <div class="stat-header">
-                    <i data-lucide="award" class="icon-points"></i>
-                    <span>Aura Points</span>
-                </div>
-                <div class="stat-value">0</div>
-                <div class="stat-footer">Earn points by studying</div>
-            </div>
-        </div>
-
-        <div class="section-row" style="grid-template-columns: 1fr 1fr; margin-top: 1.5rem;">
-            <div class="card main-stats">
-              <h3>Weekly Performance</h3>
-              <div class="chart-placeholder">
-                  <div class="bar-chart">
-                      <div class="bar" style="height: 40%"></div>
-                      <div class="bar" style="height: 60%"></div>
-                      <div class="bar" style="height: 80%"></div>
-                      <div class="bar" style="height: 50%"></div>
-                      <div class="bar" style="height: 90%"></div>
-                      <div class="bar" style="height: 70%"></div>
-                      <div class="bar" style="height: 30%"></div>
-                  </div>
-              </div>
-            </div>
-
-            <div class="card side-list">
-                <h3>Today's Subjects</h3>
-                <ul class="subject-list" id="today-subjects-list" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
-                    <li style="border: 1px dashed var(--surface-border); background: transparent; justify-content: center; color: var(--text-muted); font-size: 0.8rem;">
-                        No subjects tracked today yet
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <div id="dashboard-dynamic-container"></div>
     `,
     focus: `
         <div class="view-header">
@@ -754,9 +760,9 @@ const switchView = (viewName) => {
         
         // Custom logic for dashboard (injecting calendar)
         if (viewName === 'dashboard') {
-            const calendarContainer = document.getElementById('activity-calendar-container');
-            if (calendarContainer) {
-                calendarContainer.innerHTML = generateCalendarHTML();
+            const dashboardContainer = document.getElementById('dashboard-dynamic-container');
+            if (dashboardContainer) {
+                dashboardContainer.innerHTML = generateDashboardHTML();
             }
         }
 
