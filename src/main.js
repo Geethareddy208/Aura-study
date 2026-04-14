@@ -173,7 +173,7 @@ const generateCalendarHTML = () => {
 const views = {
     dashboard: `
         <div class="view-header">
-            <h1>Welcome back, (username)</h1>
+            <h1>Welcome back, {{username}}</h1>
             <p>You've maintained a 7-day streak! Keep it up.</p>
         </div>
         
@@ -575,7 +575,14 @@ const switchView = (viewName) => {
     }
 
     if (views[viewName]) {
-        mainContent.innerHTML = views[viewName];
+        let viewHtml = views[viewName];
+        
+        // Dynamic Variable Injection
+        if (viewName === 'dashboard') {
+            viewHtml = viewHtml.replace('{{username}}', userData.username || 'scholar');
+        }
+        
+        mainContent.innerHTML = viewHtml;
         if (pageTitle) pageTitle.textContent = viewName.charAt(0).toUpperCase() + viewName.slice(1);
         
         // Custom logic for dashboard (injecting calendar)
