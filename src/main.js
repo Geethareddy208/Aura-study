@@ -336,9 +336,21 @@ const generateCalendarHTML = () => {
 
     calendarHTML += '</div>';
     return calendarHTML;
-};
+}const generateDashboardHTML = () => {
+    // Calculate last 7 days activity for the bar chart
+    const today = new Date();
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        last7Days.push(d.getDate());
+    }
 
-const generateDashboardHTML = () => {
+    const chartHTML = last7Days.map(dayDate => {
+        const isCompleted = userData.completed_days.includes(dayDate);
+        return `<div class="bar" style="height: ${isCompleted ? '100%' : '10%'}"></div>`;
+    }).join('');
+
     return `
         <div class="view-header">
             <h1>Welcome back, ${userData.username || 'scholar'}</h1>
@@ -359,7 +371,7 @@ const generateDashboardHTML = () => {
                     <span>Current Streak</span>
                 </div>
                 <div class="stat-value">${userData.streak} Days</div>
-                <div class="stat-footer">${userData.streak > 0 ? 'Amazing consistency!' : 'Start your first session!'}</div>
+                <div class="stat-footer">${userData.streak > 0 ? 'Amazing consistency!' : 'Start your first task today!'}</div>
             </div>
             
             <div class="card stat-card">
@@ -371,7 +383,7 @@ const generateDashboardHTML = () => {
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: ${userData.goal_completion}%"></div>
                 </div>
-                <div class="stat-footer">${userData.goal_completion === 100 ? 'Goal Completed! 🏆' : 'Keep pushing!'}</div>
+                <div class="stat-footer">${userData.goal_completion === 100 ? 'Goal Completed! 🏆' : (userData.goal_completion > 0 ? 'Almost there!' : 'Add tasks to start!')}</div>
             </div>
 
             <div class="card stat-card">
@@ -388,17 +400,12 @@ const generateDashboardHTML = () => {
             <div class="card main-stats">
               <h3>Weekly Performance</h3>
               <div class="chart-placeholder">
-                  <div class="bar-chart">
-                      <div class="bar" style="height: 40%"></div>
-                      <div class="bar" style="height: 60%"></div>
-                      <div class="bar" style="height: 80%"></div>
-                      <div class="bar" style="height: 50%"></div>
-                      <div class="bar" style="height: 90%"></div>
-                      <div class="bar" style="height: 70%"></div>
-                      <div class="bar" style="height: 30%"></div>
+                  <div class="bar-chart" style="display: flex; align-items: flex-end; gap: 0.5rem; height: 100px;">
+                      ${chartHTML}
                   </div>
               </div>
             </div>
+/div>
 
             <div class="card side-list">
                 <h3>Today's Subjects</h3>
