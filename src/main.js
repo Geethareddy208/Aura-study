@@ -18,6 +18,12 @@ let userData = {
     username: ''
 };
 
+// Timer State
+let timerInterval = null;
+let timeLeft = 25 * 60;
+let timerRunning = false;
+let currentMode = 'pomodoro'; // 'pomodoro', 'short', 'long'
+
 // Sync Logic
 const fetchUserData = async () => {
     if (!currentUser) return;
@@ -52,6 +58,54 @@ const saveNote = async (title, content, status) => {
     const { error } = await supabase
         .from('revision_notes')
         .upsert({ user_id: currentUser.id, title, content, status });
+    
+    // Refresh the view if we are in vault
+    if (document.getElementById('vault-notes-grid')) {
+        switchView('vault');
+    }
+};
+
+// Timer Functions
+const startTimer = () => {
+    if (timerRunning) return;
+    timerRunning = true;
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            alert('Time is up! Great session.');
+            saveStudySession(25, 'Focus Session');
+        }
+    }, 1000);
+    const startBtn = document.querySelector('.timer-controls .btn-primary');
+    if (startBtn) startBtn.innerHTML = '<i data-lucide="pause"></i> Pause';
+    initIcons();
+};
+
+const pauseTimer = () => {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    const startBtn = document.querySelector('.timer-controls .btn-primary');
+    if (startBtn) startBtn.innerHTML = '<i data-lucide="play"></i> Start';
+    initIcons();
+};
+
+const resetTimer = () => {
+    pauseTimer();
+    if (currentMode === 'pomodoro') timeLeft = 25 * 60;
+    else if (currentMode === 'short') timeLeft = 5 * 60;
+    else timeLeft = 15 * 60;
+    updateTimerDisplay();
+};
+
+const updateTimerDisplay = () => {
+    const display = document.querySelector('.timer-display');
+    if (!display) return;
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
 // Auth Handlers
@@ -556,13 +610,59 @@ const switchView = (viewName) => {
             }
         }
 
-        // Timer Logic Hook (Example)
+        // Timer Logic Hook
         if (viewName === 'focus') {
-            document.querySelector('.btn-primary')?.addEventListener('click', () => {
-                // In a real app, this would be called when the timer reaches 0
-                // For demonstration, we'll simulate saving a 25m session
-                console.log('Timer started - will sync on finish');
+            updateTimerDisplay();
+            const startBtn = document.querySelector('.timer-controls .btn-primary');
+            const resetBtn = document.querySelector('.timer-controls .btn-secondary:first-child');
+            const skipBtn = document.querySelector('.timer-controls .btn-secondary:last-child');
+            
+            startBtn?.addEventListener('click', () => {
+                if (timerRunning) pauseTimer();
+                else startTimer();
             });
+            
+            resetBtn?.addEventListener('click', resetTimer);
+            
+            skipBtn?.addEventListener('click', () => {
+                alert('Skipping session...');
+                resetTimer();
+            });
+
+            // Mode switches
+            document.querySelectorAll('.timer-modes span').forEach(modeSpan => {
+                modeSpan.addEventListener('click', () => {
+                    document.querySelectorAll('.timer-modes span').forEach(s => s.classList.remove('active'));
+                    modeSpan.classList.add('active');
+                    currentMode = modeSpan.textContent.toLowerCase().replace(' ', '');
+                    resetTimer();
+                });
+            });
+
+            // Energy Pulse
+            document.querySelectorAll('.energy-step').forEach((step, index) => {
+                step.addEventListener('click', () => {
+                    document.querySelectorAll('.energy-step').forEach((s, idx) => {
+                        s.classList.toggle('active', idx <= index);
+                    });
+                });
+            });
+        }
+
+        // Vault Logic
+        if (viewName === 'vault') {
+            document.querySelector('.notes-header .btn-primary')?.addEventListener('click', async () => {
+                const title = prompt('Enter note title:');
+                if (title) {
+                    await saveNote(title, 'New study notes content...', 'Pending');
+                    alert('Note saved to your account!');
+                }
+            });
+        }
+
+        // Planner Logic
+        if (viewName === 'planner') {
+            // Simplified: Refresh timetable display logic could go here
         }
 
         // Auth Form Listeners
