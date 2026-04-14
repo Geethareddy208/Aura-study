@@ -353,8 +353,8 @@ const generateCalendarHTML = () => {
     for (let day = 1; day <= daysInMonth; day++) {
         const isToday = day === todayDate ? 'today' : '';
         const isCompleted = completedDays.includes(day) ? 'completed' : '';
-        // In the solar theme, completed days get a bright yellow pulse
-        calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}" style="${isCompleted ? 'background: var(--primary); color: black; border-color: white;' : ''}">${day}</div>`;
+        // In the bumblebee theme, completed days get a bright yellow pulse on black
+        calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}" style="${isCompleted ? 'background: #FACC15; color: black; border-color: white;' : 'background: black; color: white;' }">${day}</div>`;
     }
 
     calendarHTML += '</div>';
@@ -387,7 +387,7 @@ const generateDashboardHTML = () => {
 
     const chartHTML = last7Days.map(dayDate => {
         const isCompleted = userData.completed_days.includes(dayDate);
-        return `<div class="bar" style="height: ${isCompleted ? '100%' : '15%'}; background: ${isCompleted ? 'var(--primary)' : 'rgba(255,255,255,0.1)'}"></div>`;
+        return `<div class="bar" style="height: ${isCompleted ? '100%' : '15%'}; background: ${isCompleted ? 'black' : 'rgba(0,0,0,0.1)'}"></div>`;
     }).join('');
 
     return `
@@ -404,37 +404,18 @@ const generateDashboardHTML = () => {
         </div>
 
         <div class="grid-container" style="margin-top: 1.5rem;">
-            <div class="card stat-card">
-                <div class="stat-header">
-                    <i data-lucide="flame" class="icon-streak"></i>
-                    <span>Current Streak</span>
-                </div>
-                <div class="stat-value">${userData.streak} Days</div>
-                <div class="stat-footer">${userData.streak > 0 ? 'Amazing consistency!' : 'Start your first task today!'}</div>
+            <div class="card" style="background: black; border: 1px solid #FACC15; color: white;">
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">🔥 Current Streak</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #FACC15;">${userData.streak} Days</div>
             </div>
-            
-            <div class="card stat-card">
-                <div class="stat-header">
-                    <i data-lucide="target" class="icon-goal"></i>
-                    <span>Daily Goal</span>
-                </div>
-                <div class="stat-value">${userData.goal_completion}%</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${userData.goal_completion}%"></div>
-                </div>
-                <div class="stat-footer">${userData.goal_completion === 100 ? 'Goal Completed! 🏆' : (userData.goal_completion > 0 ? 'Almost there!' : 'Add tasks to start!')}</div>
+            <div class="card" style="background: black; border: 1px solid #FACC15; color: white;">
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">🎯 Daily Goal</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #FACC15;">${userData.goal_completion}%</div>
             </div>
-
-            <div class="card stat-card">
-                <div class="stat-header">
-                    <i data-lucide="award" class="icon-points"></i>
-                    <span>Aura Points</span>
-                </div>
-                <div class="stat-value">${userData.aura_points}</div>
-                <div class="stat-footer">Earn points by studying</div>
+            <div class="card" style="background: black; border: 1px solid #FACC15; color: white;">
+                <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">✨ Aura Points</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #FACC15;">${userData.aura_points}</div>
             </div>
-        </div>
-
         </div>
 
         <div class="section-row" style="grid-template-columns: 1fr 1fr; margin-top: 1.5rem;">
@@ -474,28 +455,29 @@ const generatePlannerHTML = () => {
                 <div class="time-slots" id="daily-timetable-slots">
                     ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
                         dailyTasks.map(task => `
-                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); margin-bottom: 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.05);">
+                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem; background: black; color: white; margin-bottom: 1.5rem; border-radius: 1rem; border: 1px solid #FACC15;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                     <div style="flex: 1;">
-                                        <div style="font-size: 1rem; font-weight: 600; color: var(--text-main);">${task.task_name}</div>
+                                        <div style="font-size: 1rem; font-weight: 600; color: white;">${task.task_name}</div>
+                                        <div style="font-size: 0.8rem; color: #FACC15;">${task.category}</div>
                                         <div style="font-size: 0.8rem; color: var(--text-muted);">${task.start_time || 'No time set'}</div>
                                     </div>
                                     <div style="display: flex; gap: 0.75rem; align-items: center;">
                                         <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
-                                           style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 18px;"></i>
+                                           style="color: ${task.status === 'Done' ? '#22C55E' : (task.status === 'Progress' ? '#FACC15' : 'white')}; width: 18px;"></i>
                                         <button class="delete-task-btn" data-id="${task.id}" style="background: transparent; border: none; cursor: pointer; color: #FC8181; display: flex; align-items: center;">
                                             <i data-lucide="trash-2" style="width: 16px;"></i>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.75rem; background: rgba(0,0,0,0.4); padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.1);">
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: ${task.status === 'Pending' ? 'var(--secondary)' : 'var(--text-muted)'}; font-weight: 600;">
-                                        <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--secondary);"> Pending
+                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.75rem; background: rgba(255,255,255,0.1); padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05);">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: ${task.status === 'Pending' ? '#F97316' : '#94A3B8'}; font-weight: 600;">
+                                        <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #F97316;"> Pending
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: ${task.status === 'Progress' ? 'var(--primary)' : 'var(--text-muted)'}; font-weight: 600;">
-                                        <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: var(--primary);"> In Progress
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: ${task.status === 'Progress' ? '#FACC15' : '#94A3B8'}; font-weight: 600;">
+                                        <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #FACC15;"> In Progress
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: ${task.status === 'Done' ? '#22C55E' : 'var(--text-muted)'}; font-weight: 600;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: ${task.status === 'Done' ? '#22C55E' : '#94A3B8'}; font-weight: 600;">
                                         <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #22C55E;"> Done
                                     </label>
                                 </div>

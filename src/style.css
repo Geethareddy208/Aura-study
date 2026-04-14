@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #FACC15;        /* Cyber Yellow */
-  --primary-hover: #EAB308;
+  --primary: #000000;        /* Bold Black for buttons on yellow */
+  --primary-hover: #1A1A1A;
   --secondary: #F97316;      /* Blaze Orange */
   --accent: #06B6D4;         /* Neon Cyan */
-  --bg-dark: #000000;        /* Pure Black */
-  --bg-darker: #050505;      /* Deepest Grey */
-  --surface: rgba(20, 20, 20, 0.85); /* Stealth Glass */
+  --bg-dark: #FACC15;        /* Cyber Yellow Background */
+  --bg-darker: #EAB308;      /* Slightly darker yellow */
+  --surface: #111111;        /* Solid Black Cards */
   --surface-border: rgba(255, 255, 255, 0.1);
-  --text-main: #FFFFFF;      /* Arctic White */
-  --text-muted: #94A3B8;      /* Slate Slate */
-  --shadow: 0 10px 40px rgba(250, 204, 21, 0.15);
-  --glass-bg: rgba(0, 0, 0, 0.4);
+  --text-main: #000000;      /* Black text on Yellow */
+  --text-on-dark: #FFFFFF;    /* White text on Black cards */
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(0, 0, 0, 0.9);
   --glass-border: rgba(255, 255, 255, 0.1);
   --sidebar-width: 260px;
 }
@@ -52,7 +52,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: var(--sidebar-width);
-  background: var(--primary); /* Cyber Yellow Sidebar */
+  background: #000000; /* Pure Black Sidebar */
   border-right: none;
   display: flex;
   flex-direction: column;
@@ -60,13 +60,13 @@ body {
   position: fixed;
   height: 100vh;
   z-index: 100;
-  box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+  box-shadow: 10px 0 30px rgba(0,0,0,0.2);
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #000000;
+  color: #FACC15;
   margin-bottom: 3rem;
   display: flex;
   align-items: center;
@@ -87,7 +87,7 @@ body {
   gap: 1rem;
   padding: 0.875rem 1rem;
   border-radius: 0.75rem;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(250, 204, 21, 0.7);
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -95,13 +95,13 @@ body {
 }
 
 .nav-item:hover, .nav-item.active {
-  background: rgba(0, 0, 0, 0.1);
-  color: #000000;
+  background: rgba(250, 204, 21, 0.1);
+  color: #FACC15;
 }
 
 .nav-item.active {
-  background: rgba(0, 0, 0, 0.05);
-  border-left: 4px solid #000000;
+  background: rgba(250, 204, 21, 0.05);
+  border-left: 4px solid #FACC15;
 }
 
 /* Main Content */
@@ -118,8 +118,8 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 0 4rem;
-  border-bottom: 1px solid var(--surface-border);
-  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: rgba(250, 204, 21, 0.8);
   backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
@@ -217,14 +217,14 @@ header {
 
 .progress-bar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: var(--primary);
+  background: #FACC15;
   border-radius: 4px;
 }
 
@@ -288,19 +288,20 @@ header {
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: white;
+  background: #000000;
+  color: #FACC15;
+  border: none;
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
+  background: #333333;
   transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
 }
 
 .btn-large {
@@ -494,16 +495,16 @@ input:checked + .slider:before { transform: translateX(26px); }
 .input-group label { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
 
 .input-group input {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #000000;
   padding: 1rem;
   border-radius: 0.75rem;
-  background: #F7FAFC;
-  border: 1px solid var(--surface-border);
-  color: var(--text-main);
   outline: none;
   transition: all 0.2s;
 }
 
-.input-group input:focus { border-color: var(--primary); background: white; }
+.input-group input:focus { border-color: #000000; background: white; }
 
 .auth-footer { text-align: center; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted); }
 .auth-footer a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
