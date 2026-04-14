@@ -107,6 +107,26 @@ const setTaskStatus = async (taskId, newStatus) => {
     }
 };
 
+const deleteDailyTask = async (taskId) => {
+    if (!currentUser) return;
+    if (!confirm('Are you sure you want to delete this task?')) return;
+
+    const { error } = await supabase
+        .from('daily_tasks')
+        .delete()
+        .eq('id', taskId);
+    
+    if (error) {
+        console.error('Delete Task Error:', error);
+        alert('Could not delete task.');
+    }
+
+    await fetchDailyTasks();
+    if (document.getElementById('daily-timetable-slots')) {
+        switchView('planner');
+    }
+};
+
 const calculateDailyProgress = async () => {
     if (dailyTasks.length === 0) {
         userData.goal_completion = 0;
@@ -459,8 +479,13 @@ const generatePlannerHTML = () => {
                                         <div style="font-size: 1rem; font-weight: 600; color: var(--text-main);">${task.task_name}</div>
                                         <div style="font-size: 0.8rem; color: var(--text-muted);">${task.start_time || 'No time set'}</div>
                                     </div>
-                                    <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
-                                       style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 18px;"></i>
+                                    <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                        <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
+                                           style="color: ${task.status === 'Done' ? 'var(--secondary)' : (task.status === 'Progress' ? 'var(--accent)' : 'var(--text-muted)')}; width: 18px;"></i>
+                                        <button class="delete-task-btn" data-id="${task.id}" style="background: transparent; border: none; cursor: pointer; color: #ef4444; display: flex; align-items: center;">
+                                            <i data-lucide="trash-2" style="width: 16px;"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.5rem; background: rgba(0,0,0,0.2); padding: 0.5rem 0.75rem; border-radius: 0.5rem;">
                                     <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Pending' ? 'var(--text-main)' : 'var(--text-muted)'}">
@@ -886,6 +911,13 @@ const switchView = (viewName) => {
                     const id = e.target.dataset.id;
                     const status = e.target.value;
                     await setTaskStatus(id, status);
+                });
+            });
+
+            document.querySelectorAll('.delete-task-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    await deleteDailyTask(id);
                 });
             });
         }
