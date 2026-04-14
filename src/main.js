@@ -464,20 +464,20 @@ const generatePlannerHTML = () => {
                                     </div>
                                     <div style="display: flex; gap: 0.75rem; align-items: center;">
                                         <i data-lucide="${task.status === 'Done' ? 'check-circle' : (task.status === 'Progress' ? 'clock' : 'circle')}" 
-                                           style="color: ${task.status === 'Done' ? '#22C55E' : (task.status === 'Progress' ? '#FACC15' : 'white')}; width: 18px;"></i>
+                                           style="color: white; width: 18px;"></i>
                                         <button class="delete-task-btn" data-id="${task.id}" style="background: transparent; border: none; cursor: pointer; color: #FC8181; display: flex; align-items: center;">
                                             <i data-lucide="trash-2" style="width: 16px;"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.75rem; background: #000; padding: 0.75rem 1rem; border: 1px solid white;">
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Pending' ? '1px solid white' : 'none'}; padding: 2px 5px;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Pending' ? '2px solid white' : '1px solid #333'}; padding: 4px 8px; border-radius: 4px;">
                                         <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: white;"> Pending
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Progress' ? '1px solid white' : 'none'}; padding: 2px 5px;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Progress' ? '2px solid white' : '1px solid #333'}; padding: 4px 8px; border-radius: 4px;">
                                         <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: white;"> In Progress
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Done' ? '1px solid white' : 'none'}; padding: 2px 5px;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; color: white; border: ${task.status === 'Done' ? '2px solid white' : '1px solid #333'}; padding: 4px 8px; border-radius: 4px;">
                                         <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: white;"> Done
                                     </label>
                                 </div>

@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #FFFFFF;        /* White for Primary Actions */
-  --primary-hover: #E2E8F0;
+  --primary: #FFFFFF;        
+  --primary-hover: #FFFFFF;
   --secondary: #FFFFFF;
   --accent: #FFFFFF;
-  --bg-dark: #000000;        /* Pure Black Background */
+  --bg-dark: #000000;        
   --bg-darker: #000000;
-  --surface: #000000;        /* Pure Black Cards */
-  --surface-border: #FFFFFF; /* High Contrast White Borders */
-  --text-main: #FFFFFF;      /* Pure White Text */
-  --text-muted: #CBD5E0;      /* Soft Grey Text */
+  --surface: #000000;        
+  --surface-border: #FFFFFF; 
+  --text-main: #FFFFFF;      
+  --text-muted: #FFFFFF;      
   --shadow: none;
   --glass-bg: #000000;
   --glass-border: #FFFFFF;
@@ -97,8 +97,9 @@ body {
 }
 
 .nav-item.active {
-  background: rgba(254, 243, 199, 0.05);
-  border-left: 4px solid #FEF3C7;
+  background: #FFFFFF;
+  color: #000000;
+  border-left: 4px solid #FFFFFF;
 }
 
 /* Main Content */
@@ -646,11 +647,8 @@ input:checked + .slider:before { transform: translateX(26px); background-color: 
   background: #000000;
   border: 1px solid #FFFFFF;
   color: #FFFFFF;
-}
-  border: 1px solid rgba(255,255,255,0.05);
   position: relative;
   transition: all 0.2s;
-  color: var(--text-muted);
 }
 
 .calendar-day.empty {
