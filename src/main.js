@@ -125,6 +125,8 @@ const calculateDailyProgress = async () => {
             if (!userData.completed_days.includes(today)) {
                 userData.completed_days.push(today);
                 userData.streak += 1;
+                userData.aura_points += 100; // Award exactly 100 points per day
+                alert('🌟 Goal Accomplished! +100 Aura Points Awarded! 🌟');
             }
         }
     }
@@ -339,6 +341,20 @@ const generateCalendarHTML = () => {
 };
 
 const generateDashboardHTML = () => {
+    // Calculate Milestone Stars
+    let stars = '';
+    let appreciation = 'Start your journey to earn stars!';
+    if (userData.aura_points >= 1500) {
+        stars = '⭐⭐⭐';
+        appreciation = '🏆 Gold Legend! You are unstoppable!';
+    } else if (userData.aura_points >= 1000) {
+        stars = '⭐⭐';
+        appreciation = '🥈 Silver Master! Exceptional dedication!';
+    } else if (userData.aura_points >= 500) {
+        stars = '⭐';
+        appreciation = '🥉 Bronze Scholar! Great progress!';
+    }
+
     // Calculate last 7 days activity for the bar chart
     const today = new Date();
     const last7Days = [];
@@ -355,8 +371,8 @@ const generateDashboardHTML = () => {
 
     return `
         <div class="view-header">
-            <h1>Welcome back, ${userData.username || 'scholar'}</h1>
-            <p>You've maintained a ${userData.streak}-day streak! Keep it up.</p>
+            <h1>Welcome back, ${userData.username || 'scholar'} ${stars}</h1>
+            <p>${appreciation}</p>
         </div>
         
         <div class="card activity-card" style="margin-top: 1.5rem;">
