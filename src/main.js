@@ -353,8 +353,8 @@ const generateCalendarHTML = () => {
     for (let day = 1; day <= daysInMonth; day++) {
         const isToday = day === todayDate ? 'today' : '';
         const isCompleted = completedDays.includes(day) ? 'completed' : '';
-        // In the muted theme, completed days get a subtle stone tint
-        calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}" style="${isCompleted ? 'background: #D8E2DC; border-color: #B7B1F2;' : ''}">${day}</div>`;
+        // In the enchanted theme, completed days get a crystal teal tint
+        calendarHTML += `<div class="calendar-day ${isToday} ${isCompleted}" style="${isCompleted ? 'background: #B2F5EA; border-color: #4FD1C5;' : ''}">${day}</div>`;
     }
 
     calendarHTML += '</div>';
@@ -387,7 +387,7 @@ const generateDashboardHTML = () => {
 
     const chartHTML = last7Days.map(dayDate => {
         const isCompleted = userData.completed_days.includes(dayDate);
-        return `<div class="bar" style="height: ${isCompleted ? '100%' : '15%'}; background: ${isCompleted ? '#D8E2DC' : 'rgba(255,255,255,0.4)'}"></div>`;
+        return `<div class="bar" style="height: ${isCompleted ? '100%' : '15%'}; background: ${isCompleted ? 'var(--primary)' : '#EDF2F7'}"></div>`;
     }).join('');
 
     return `
@@ -474,7 +474,7 @@ const generatePlannerHTML = () => {
                 <div class="time-slots" id="daily-timetable-slots">
                     ${dailyTasks.length === 0 ? '<div class="slot" style="color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">No tasks planned for today</div>' : 
                         dailyTasks.map(task => `
-                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem; border-bottom: 1px solid var(--surface-border); background: #fcd5ce; margin-bottom: 0.5rem; border-radius: 0.75rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                            <div class="task-item ${task.status === 'Done' ? 'completed' : ''}" style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem; border-bottom: 1px solid var(--surface-border); background: white; margin-bottom: 1.5rem; border-radius: 1rem; box-shadow: var(--shadow);">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                     <div style="flex: 1;">
                                         <div style="font-size: 1rem; font-weight: 600; color: var(--text-main);">${task.task_name}</div>
@@ -488,15 +488,15 @@ const generatePlannerHTML = () => {
                                         </button>
                                     </div>
                                 </div>
-                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.5rem; background: rgba(255,255,255,0.3); padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.03);">
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Pending' ? '#8E8A9A' : 'var(--text-muted)'}">
-                                        <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #FCD5CE;"> Pending
+                                <div class="status-options" style="display: flex; gap: 1.5rem; margin-top: 0.5rem; background: #F8FAFC; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.04);">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Pending' ? '#F687B3' : 'var(--text-muted)'}">
+                                        <input type="radio" name="status-${task.id}" value="Pending" ${task.status === 'Pending' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #F687B3;"> Pending
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Progress' ? '#4A4458' : 'var(--text-muted)'}">
-                                        <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #D8E2DC;"> In Progress
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Progress' ? '#9F7AEA' : 'var(--text-muted)'}">
+                                        <input type="radio" name="status-${task.id}" value="Progress" ${task.status === 'Progress' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #A78BFA;"> In Progress
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Done' ? '#B7B1F2' : 'var(--text-muted)'}">
-                                        <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #E8E8E4;"> Done
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; cursor: pointer; color: ${task.status === 'Done' ? '#38B2AC' : 'var(--text-muted)'}">
+                                        <input type="radio" name="status-${task.id}" value="Done" ${task.status === 'Done' ? 'checked' : ''} class="status-radio" data-id="${task.id}" style="accent-color: #4FD1C5;"> Done
                                     </label>
                                 </div>
                             </div>
